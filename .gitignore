@@ -1,0 +1,17 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+go-todo-cli
+
+# Test binary
+*_test
+
+# Godep package management
+_obj/
+_test/
+_tool/
+
+# VS Code
+.vscode/
