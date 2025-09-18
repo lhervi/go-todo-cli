@@ -8,7 +8,7 @@ import (
 const tasksFile = "tasks.json"
 
 // SaveTasks guarda una lista de tareas en un archivo JSON.
-func SaveTask(tasks []Task) error {
+func SaveTask(filename string, tasks []Task) error {
 	data, err := json.MarshalIndent(tasks, "", " ")
 	if err != nil {
 		return err
@@ -16,7 +16,7 @@ func SaveTask(tasks []Task) error {
 	return os.WriteFile(tasksFile, data, 0644)
 }
 
-func LoadTasks() ([]Task, error) {
+func LoadTasks(filename string) ([]Task, error) {
 	data, err := os.ReadFile(tasksFile)
 	if err != nil {
 		if os.IsNotExist(err) {
