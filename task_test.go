@@ -24,4 +24,13 @@ func TestTaskCreation(t *testing.T) {
 		t.Error("La tarea no debería estar completada al ser creada")
 	}
 
+	if task.ID != 1 {
+		t.Errorf("ID incorrecto, se esperaba 1, se obtuvo %d", task.ID)
+	}
+
+	// Verificamos que CreatedAt no sea un valor "cero" de tiempo, lo que indica que se inicializó correctamente.
+	if task.CreatedAt.IsZero() {
+		t.Error("CreatedAt no fue inicializado correctamente")
+	}
+
 }

@@ -1,0 +1,14 @@
+[
+ {
+  "id": 1,
+  "content": "Comprar pan",
+  "completed": true,
+  "created_at": "2025-09-18T18:13:32.256758523-04:00"
+ },
+ {
+  "id": 3,
+  "content": "Refactorizar el proyecto 1",
+  "completed": true,
+  "created_at": "2025-09-18T19:09:13.805557049-04:00"
+ }
+]

@@ -4,76 +4,53 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"time"
 )
 
 func main() {
-	// Define los "flags" para los comandos.
-	add := flag.Bool("add", false, "Add new task")
-	list := flag.Bool("list", false, "List all task")
-	taskContent := flag.String("task", "", "The content of the task of add")	
+	add := flag.Bool("add", false, "Add a new task")
+	list := flag.Bool("list", false, "List all tasks")
+	taskContent := flag.String("task", "", "The content of the task to add")
+	completeID := flag.Int("complete", 0, "Complete a task by its ID")
+	deleteID := flag.Int("delete", 0, "Delete a task by its ID")
 
 	flag.Parse()
 
-	//Cargar las tareas existentes
 	tasks, err := LoadTasks("tasks.json")
-
 	if err != nil {
-		fmt.Println("Error loading tasks: ", err)
+		fmt.Println("Error loading tasks:", err)
 		os.Exit(1)
 	}
 
-	//Lógica de los comandos
 	switch {
 	case *add:
 		if *taskContent == "" {
-			fmt.Println("Error: no task content provided.")
+			fmt.Println("Error: No task content provided.")
 			os.Exit(1)
 		}
-
-		addTask (&tasks, *taskContent)
+		addTask(&tasks, *taskContent)
 		if err := SaveTasks("tasks.json", tasks); err != nil {
-			fmt.Prinln("Error saving tasks:", err)
+			fmt.Println("Error saving tasks:", err)
 			os.Exit(1)
 		}
 		fmt.Println("Task added successfully.")
 	case *list:
-		listTasks(&tasks)		
+		listTasks(&tasks)
+	case *completeID > 0:
+		completeTask(&tasks, *completeID)
+		if err := SaveTasks("tasks.json", tasks); err != nil {
+			fmt.Println("Error saving tasks:", err)
+			os.Exit(1)
+		}
+		fmt.Printf("Task %d completed successfully.\n", *completeID)
+	case *deleteID > 0:
+		deleteTask(&tasks, *deleteID)
+		if err := SaveTasks("tasks.json", tasks); err != nil {
+			fmt.Println("Error saving tasks:", err)
+			os.Exit(1)
+		}
+		fmt.Printf("Task %d deleted successfully.\n", *deleteID)
 	default:
-		fmt.Println("No command specified. Use -aa or -list.")
+		fmt.Println("No command specified. Use -add, -list, -complete or -delete.")
 		os.Exit(1)
 	}
-
-	func addTask(tasks *[]Task, content string) {
-		id:= 1
-		if len(*tasks) > 0 {
-			id = (*tasks)[len(*tasks)-1].ID + 1
-		}
-		newTask := Task {
-			ID: id,
-			Content: content,
-			Completed: false,
-			CreatedAt: time.Now(),
-
-		}
-		*tasks = append(*tasks, bewTask)
-	}
-
-	// listTasks imprime la lista de tareas en la terminal.
-	func listTasks(tasks *[]Task) {
-		if len(*tasks) == 0 {
-			fmt.Println("No tasks to display.")
-			return
-		}
-		fmt.Println("Tasls:")
-		for _, task := range *tasks {
-			status := "[ ]"
-			if task.Completed {
-				status = "[x]"
-			}
-			fmt.Printf("%s %d: %s\n", status, task.ID, task.Content)
-		}
-	}
-
-
 }
